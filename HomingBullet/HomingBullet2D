@@ -37,10 +37,12 @@ public class HomingBullet : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.transform == target)
+
+		GameObject collision = other.gameObject;
+		if (collision.CompareTag("Player"))
 		{
 			// 충돌 처리 (이펙트, 데미지 등)
-			Debug.Log("충격!");
+			Debug.Log("유도 탄환 충격!");
 			Destroy(gameObject);
 		}
 	}

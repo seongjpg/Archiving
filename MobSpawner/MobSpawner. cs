@@ -1,0 +1,48 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+public class MobSpawner : MonoBehaviour
+{
+    [SerializeField] GenMob gm;
+    [SerializeField] SpanwerPoolAssets poolAssets;
+    private List<SpanwerPoolAssets.Elem_And_Prop> objPool;
+    float spawnerLifeTime;
+    public RectInt room;
+    int summonMob;
+    float summonCycle;
+    float curCycle;
+
+    void Start()
+    {
+        summonMob = Random.Range(3, 20); // 생성되는 몬스터의 수량은 방의 크기에 비례하게끔 설정
+        summonCycle = summonMob / 2; // 스포너 몬스터 최초 생성 주기
+        spawnerLifeTime = summonMob; // 스포너의 수명                               
+        objPool = poolAssets.pool; // 오브젝트 풀 반영
+		curCycle = summonCycle; // 최초 방 입장시 즉시 생성 되게끔 설정
+		this.gameObject.SetActive(false); // 기본적인 세팅이 끝난 이후에는 바로 비활성화 할 것. 
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        curCycle += Time.deltaTime;
+        if (curCycle >= summonCycle) // 몬스터 소환 사이클이 도래
+        {
+            curCycle = 0;
+            gm.SpawnObj(limit: 50, room, objPool); // limit는 사후 적절하게 바꿔 관리하여야 한다.
+            summonCycle += 3;
+            Debug.Log($"current summon cycle : {summonCycle}");
+        }     
+
+        if (summonCycle > spawnerLifeTime) // 스포너 권장 주기를 넘어간 경우 파괴한다.
+        {
+            GameObject.Destroy(this.gameObject);
+        }
+    }
+
+    public void SetRoom(RectInt rect)
+    {
+        room = gm.SetRoom(rect);
+    }
+
+}

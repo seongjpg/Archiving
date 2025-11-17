@@ -1,0 +1,163 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+
+public class HearthUI : MonoBehaviour
+{
+    GameObject Player;
+    PlayerManager pm;
+    PlayerMovement pMov;
+
+    [SerializeField] Sprite Heart_full;
+    [SerializeField] Sprite Heart_3per4;
+    [SerializeField] Sprite Heart_half;
+    [SerializeField] Sprite Heart_quarter;
+    [SerializeField] Sprite Heart_empty;
+
+    VisualElement Heart01;
+    VisualElement Heart02;
+    VisualElement Heart03;
+    VisualElement Heart04;
+    VisualElement Heart05;
+/*
+이 부분에 VisualElement를 추가하면 더 높은 체력도 표시할 수 있다.
+
+
+*/
+
+    private void OnEnable()
+    {
+        Player = GameObject.FindWithTag("Player");
+        pm = Player.GetComponent<PlayerManager>();
+        pMov = Player.GetComponent<PlayerMovement>();
+
+        // UIDocument 컴포넌트
+        var uiDocument = GetComponent<UIDocument>();
+
+        // UIDocument 컴포넌트 내의 루트 요소
+        var root = uiDocument.rootVisualElement;
+        // 이후, root를 이용해 실제로 uiDocument에 존재하는 ui object들에 접근할 수 있다.
+
+        //ui 영역에서 표시하는 항목.
+        //경우에 따라서 하트의 개수를 늘리고 줄일 수 있다.
+        Heart01 = root.Q<VisualElement>("Heart01");
+        Heart02 = root.Q<VisualElement>("Heart02");
+        Heart03 = root.Q<VisualElement>("Heart03");
+        Heart04 = root.Q<VisualElement>("Heart04");
+        Heart05 = root.Q<VisualElement>("Heart05");
+/*
+늘린 하트를 이곳에 넣는다.
+*/
+
+        HealthChange(pm.curHealth); // ui의 활성화 시 현재 체력과 하트를 연동시킨다.
+    }
+
+    private void OnDisable()
+    {
+        if (Player != null) HealthChange(pm.curHealth);
+    }
+
+    //하트를 조작을 입력받는 함수
+    public void HealthChange(int health)
+    {
+        int fullAmt = health / 4; // 꽉 찬 하트의 개수
+        int notFullAmt = health % 4; // 꽉 차지 않은 하트가 나타낼 체력
+        Sprite notFullSprite; // notFullAmt가 갖고 있는 값을 나타낼 스프라이트
+
+        FillFullHeart(fullAmt); // 꽉 찬 하트를 채움, 빈 하트도 채움.
+        notFullSprite = FindNotFullSprite(notFullAmt); // 체력을 4로 나눈 나머지가 무엇인지에 따라 스프라이트 결정.
+        FillNotFullHeart(fullAmt, notFullSprite); // 꼬다리 하트도 채우기
+    }
+
+    //우선 하트를 전부 EmptyHeart로 초기화.
+    private void FillEmptyHeart()
+    {
+        Heart01.style.backgroundImage = Heart_empty.texture;
+        Heart02.style.backgroundImage = Heart_empty.texture;
+        Heart03.style.backgroundImage = Heart_empty.texture;
+        Heart04.style.backgroundImage = Heart_empty.texture;
+        Heart05.style.backgroundImage = Heart_empty.texture;
+/*
+하트의 개수가 변경된 경우, 여기서 EmptyHeart로 초기화해준다.
+*/
+    }
+    //이 함수에서, fullAmt의 값에 따라서 하트를 채울 것이다.
+     private void FillFullHeart(int fullAmt)
+     {
+     switch (fullAmt)
+     {
+         case 1:
+             Heart01.style.backgroundImage = Heart_full.texture;
+             break;
+         case 2:
+             Heart01.style.backgroundImage = Heart_full.texture;
+             Heart02.style.backgroundImage = Heart_full.texture;
+             break;
+         case 3:
+             Heart01.style.backgroundImage = Heart_full.texture;
+             Heart02.style.backgroundImage = Heart_full.texture;
+             Heart03.style.backgroundImage = Heart_full.texture;
+             break;
+         case 4:
+             Heart01.style.backgroundImage = Heart_full.texture;
+             Heart02.style.backgroundImage = Heart_full.texture;
+             Heart03.style.backgroundImage = Heart_full.texture;
+             Heart04.style.backgroundImage = Heart_full.texture;
+             break;
+
+         case 5:
+             Heart01.style.backgroundImage = Heart_full.texture;
+             Heart02.style.backgroundImage = Heart_full.texture;
+             Heart03.style.backgroundImage = Heart_full.texture;
+             Heart04.style.backgroundImage = Heart_full.texture;
+             Heart05.style.backgroundImage = Heart_full.texture;
+             break;
+         }
+/*
+하트의 개수가 변경된 경우, 이 함수의 각 case 별 하트의 개수를 변경해주고, case를 추가해줘야 한다.
+*/
+     }
+
+    //남은 꼬다리 하트가 무엇인지를 정한다.
+    private Sprite FindNotFullSprite(int notFullAmt)
+    {
+        switch (notFullAmt)
+        {
+            case 0:
+                return Heart_empty;
+            case 1:
+                return  Heart_quarter;
+            case 2:
+                return  Heart_half;
+            case 3:
+                return Heart_3per4;
+        }
+        Debug.Log("오류 발생-제대로 된 체력이 안받아와지는 모양");
+        return Heart_empty;
+    }
+
+    // fullAmt의 값에 따라서, notFullSprite로 변경할 위치를 정한다.
+    private void FillNotFullHeart(int fullAmt, Sprite notFullSprite)
+    {
+        switch (fullAmt)
+        {
+            case 0:
+                Heart01.style.backgroundImage = notFullSprite.texture;
+                break;
+            case 1:
+                Heart02.style.backgroundImage = notFullSprite.texture;
+                break;
+            case 2:
+                Heart03.style.backgroundImage = notFullSprite.texture;
+                break;
+            case 3:
+                Heart04.style.backgroundImage = notFullSprite.texture;
+                break;
+            case 4:
+                Heart05.style.backgroundImage = notFullSprite.texture;
+                break;
+/*
+이 부분에 case를 추가하여 하트의 개수가 늘어난 상황에 대응 가능.
+*/
+        }
+    }
+}

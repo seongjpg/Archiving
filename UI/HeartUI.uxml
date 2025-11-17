@@ -1,0 +1,12 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="UI" style="flex-grow: 1; transition-property: all, ignored; transition-duration: 0s, 0s; transition-timing-function: ease, ease; transition-delay: 0s, 0s; background-color: rgba(0, 0, 0, 0); position: relative; left: 0; bottom: 0; height: 1080px;">
+        <ui:VisualElement name="HealthGauge" style="flex-grow: 1; width: 648px; height: 406px; position: absolute;">
+            <ui:VisualElement name="Heart01" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/IMG/UI/HUD/Heart.png?fileID=4606908045521496030&amp;guid=7feefb88c1bf2d144bc4a7388822ea5e&amp;type=3#Heart_0&quot;); width: 70px; height: 70px; position: absolute; left: 20px; top: 20px;" />
+            <ui:VisualElement name="Heart02" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/IMG/UI/HUD/Heart.png?fileID=4606908045521496030&amp;guid=7feefb88c1bf2d144bc4a7388822ea5e&amp;type=3#Heart_0&quot;); width: 70px; height: 70px; position: absolute; left: 95px; top: 20px;" />
+            <ui:VisualElement name="Heart03" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/IMG/UI/HUD/Heart.png?fileID=4606908045521496030&amp;guid=7feefb88c1bf2d144bc4a7388822ea5e&amp;type=3#Heart_0&quot;); width: 70px; height: 70px; position: absolute; left: 170px; top: 20px;" />
+            <ui:VisualElement name="Heart04" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/IMG/UI/HUD/Heart.png?fileID=4606908045521496030&amp;guid=7feefb88c1bf2d144bc4a7388822ea5e&amp;type=3#Heart_0&quot;); width: 70px; height: 70px; position: absolute; left: 245px; top: 20px;" />
+            <ui:VisualElement name="Heart05" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/IMG/UI/HUD/Heart.png?fileID=4606908045521496030&amp;guid=7feefb88c1bf2d144bc4a7388822ea5e&amp;type=3#Heart_0&quot;); width: 70px; height: 70px; position: absolute; left: 320px; top: 20px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <TabbedView />
+</ui:UXML>

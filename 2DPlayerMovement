@@ -1,0 +1,61 @@
+using UnityEngine;
+
+public class PlayerMovement : MonoBehaviour
+{
+
+    public LayerMask wallLayer;      // 벽 레이어. 벽 감지 여부는 콜라이더 대신 레이어로 하는 편이 벽뚫림 버그 등이 없어 안전하다. 
+
+    private GameObject player;
+    Rigidbody2D rb;
+    public PlayerManager pm;
+	  public Transform playerTr;
+
+    void Start()
+    {
+        //플레이어 게임 오브젝트 내에 존재하는 PlayerManager를 뽑아온다.
+        player = GameObject.FindWithTag("Player");
+        rb = player.GetComponent<Rigidbody2D>();
+        pm = player.GetComponent<PlayerManager>();
+		  playerTr = player.GetComponent<Transform>();
+    }
+
+    void Update()
+    {
+        PlayerMove();
+    }
+
+    private void PlayerMove() {
+      Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+      Vector2 dir = input.normalized;
+  
+      Vector2 moveX = new Vector2(dir.x, 0);
+      Vector2 moveY = new Vector2(0, dir.y);
+  
+      // X축 검사 -> raycast를 이용한 x축 이동여부 검사. 만일 이를 y축과 동시에 진행할 경우 x축과 y축 둘 중 하나라도 벽에 닿아버리면 반대방향 이외에는 이동을 할 수 없게 되어버린다.
+      if (moveX != Vector2.zero) {
+      //레이어 감지를 위해서 Raycast를 이용하였다.
+            RaycastHit2D hitX = Physics2D.CapsuleCast(
+              rb.position, transform.localScale, CapsuleDirection2D.Vertical,
+              0f, moveX, pm.speed, wallLayer
+          );
+  
+          if (hitX.collider != null)
+              moveX = Vector2.zero; // X방향 벽 → X이동 차단
+      }
+  
+      // Y축 검사 -> x축과 마찬가지. 둘을 분리하여야 한다. 
+      if (moveY != Vector2.zero) {
+          RaycastHit2D hitY = Physics2D.CapsuleCast(
+              rb.position, transform.localScale, CapsuleDirection2D.Vertical,
+              0f, moveY, pm.speed, wallLayer
+          );
+  
+          if (hitY.collider != null)
+              moveY = Vector2.zero; // Y방향 벽 → Y이동 차단
+      }
+  
+      Vector2 finalMove = moveX + moveY;
+      rb.MovePosition(rb.position + finalMove * pm.speed);
+}
+    
+}
